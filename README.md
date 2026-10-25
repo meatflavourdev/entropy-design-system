@@ -4,32 +4,32 @@ A reusable design system foundation for the Entropy collaborative product UI.
 
 ## Overview
 
-Entropy is a collaborative diagram editor and document library. The design system reflects that product intent: modern, collaborative, neutral, with one distinctive product accent color and clean, readable information density.
+Entropy is a collaborative diagram editor and document library. The design system reflects the product’s intent: modern, collaborative, clean, and trust-oriented, with a strong green accent for meaning and active states.
+
+## Goals
+
+- Standardize product UI across workspace surfaces
+- Support collaboration, status, and shared-action flows
+- Create a reusable front-end foundation for the editor and landing pages
+- Keep the system easy to apply to Material UI v4 while making upgrades manageable later
 
 ## Design direction
 
-- Product-first and collaborative
-- Minimal but trustworthy
-- Clean neutral backgrounds with a bright green primary accent
-- Support for shared editing, presence, and real-time activity states
-- Designed for diagramming, documentation, and communication surfaces
-
-## Brand values
-
-- Clarity over decoration
-- Trust over noise
-- Consistent collaboration patterns across UI surfaces
-- Fast recognition for user actions and status states
+- Modern collaborative product aesthetics
+- Clean neutral surfaces
+- Bright green product accent
+- Soft, approachable shadows and rounded panels
+- Strong clarity for workspace actions and user states
 
 ## Color palette
 
-### Primary palette
+### Primary
 
 - Primary: `#00e676`
 - Primary dark: `#00b853`
 - Primary light: `#66f9a0`
 
-### Neutral palette
+### Neutral
 
 - Background: `#f5f7fa`
 - Surface: `#ffffff`
@@ -38,10 +38,8 @@ Entropy is a collaborative diagram editor and document library. The design syste
 - Text: `#111827`
 - Text secondary: `#6b7280`
 - Text muted: `#9ca3af`
-- Dark base: `#111827`
-- Dark alt: `#1f2937`
 
-### Feedback palette
+### Feedback
 
 - Success: `#22c55e`
 - Warning: `#fbbf24`
@@ -50,140 +48,50 @@ Entropy is a collaborative diagram editor and document library. The design syste
 
 ## Typography
 
-Font stack:
-
-- Inter
-- Segoe UI
-- Roboto
-- Helvetica Neue
-- Arial
-- sans-serif
-
-Type scale:
-
-- h1: 700, -0.04em tracking
-- h2: 700, -0.04em tracking
-- h3: 700, -0.04em tracking
-- h4: 600, -0.03em tracking
-- h5: 600, -0.02em tracking
-- h6: 600, -0.02em tracking
-- body1: 1rem / 1.6
-- body2: 0.875rem / 1.5
-
-## Spacing scale
-
-The spacing scale is based on an 8px rhythm:
-
-- 0
-- 4
-- 8
-- 12
-- 16
-- 24
-- 32
-- 40
-- 48
-- 64
-
-## Radius
-
-- Small: 8px
-- Medium: 12px
-- Large: 16px
-
-## Shadows
-
-Use subtle shadows for surfaces and light elevation rather than strong dramatic depth.
+- Font stack: Inter, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif
+- Heading weight: 600–700
+- Body weight: 400–500
+- Large heading tracking tuned tight for diagram/editor contexts
 
 ## Components
 
-### EntropyButton
+### Included
 
-Use for primary or secondary user actions.
+- `EntropyButton`
+- `EntropyAvatarStack`
+- `EntropyToolbar`
+- `EntropyChatInput`
+- `EntropyDrawer`
+- `EntropyPanel`
+- `EntropyInput`
+- `EntropyBadge`
+- `EntropyModal`
+- `EntropyAppBar`
+
+## Example usage
 
 ```jsx
 import EntropyButton from './design-system/components/EntropyButton';
+import EntropyInput from './design-system/components/EntropyInput';
+import EntropyBadge from './design-system/components/EntropyBadge';
 
-<EntropyButton variant="contained">Primary action</EntropyButton>
-<EntropyButton variant="outlined">Secondary</EntropyButton>
+<EntropyButton variant="contained">Launch demo</EntropyButton>
+<EntropyInput label="Search workspace" />
+<EntropyBadge label="Synced" tone="success" />
 ```
 
-### EntropyAvatarStack
+## Demo app
 
-Use for collaboration presence or shared editing states.
+The project includes a lightweight React demo page that showcases the system in a realistic layout: marketing hero, foundation cards, component gallery, toolbar, drawer, and modal flows.
 
-```jsx
-import EntropyAvatarStack from './design-system/components/EntropyAvatarStack';
+## Integration plan for the main app
 
-const users = [
-  { name: 'Jeremy', color: '#00e676' },
-  { name: 'Nathan', color: '#1f2937' },
-  { name: 'Ava', color: '#3b82f6' },
-];
-
-<EntropyAvatarStack users={users} max={3} />
-```
-
-### EntropyToolbar
-
-Use for diagram editor actions.
-
-```jsx
-import EntropyToolbar from './design-system/components/EntropyToolbar';
-
-<EntropyToolbar onAction={(action) => console.log(action)} />
-```
-
-### EntropyChatInput
-
-Use for chat and message entry surfaces.
-
-```jsx
-import EntropyChatInput from './design-system/components/EntropyChatInput';
-
-<EntropyChatInput onSubmit={(value) => console.log(value)} />
-```
-
-### EntropyDrawer
-
-Use for persistent side panels and workspace drawers.
-
-```jsx
-import EntropyDrawer from './design-system/components/EntropyDrawer';
-
-<EntropyDrawer open title="Team chat" width={320}>
-  <div>Contents...</div>
-</EntropyDrawer>
-```
-
-### EntropyPanel
-
-Use for grouped content cards and content blocks.
-
-```jsx
-import EntropyPanel from './design-system/components/EntropyPanel';
-
-<EntropyPanel>
-  <h3>Section title</h3>
-  <p>Content area.</p>
-</EntropyPanel>
-```
-
-## Usage guidance
-
-### Recommended patterns
-
-- Use the primary accent for calls to action and confirmation states.
-- Keep surfaces mostly white or near-white to preserve clarity.
-- Use green sparingly to highlight only important, active, or successful states.
-- Maintain consistent spacing between form fields, toolbars, and cards.
-
-### Avoid
-
-- Overusing the accent color on every control
-- Creating multiple competing accent colors in the same screen
-- Using shadows too aggressively for low-level UI controls
-- Mixing inconsistent border styles and radii across the same surface
+1. Replace ad-hoc styling in the landing page with Entropy tokens
+2. Migrate editor shell surfaces to EntropyAppBar and EntropyDrawer
+3. Standardize all form controls with EntropyInput and EntropyButton
+4. Replace custom status styling with EntropyBadge
+5. Pull collaboration UX patterns into a shared avatar stack and presence system
+6. Upgrade Material UI in a focused pass after design-system adoption is stable
 
 ## Quick start
 
@@ -191,32 +99,3 @@ import EntropyPanel from './design-system/components/EntropyPanel';
 npm install
 npm start
 ```
-
-## Project structure
-
-```text
-src/
-  App.js
-  index.js
-  design-system/
-    theme.js
-    index.js
-    components/
-      EntropyButton.js
-      EntropyAvatarStack.js
-      EntropyToolbar.js
-      EntropyChatInput.js
-      EntropyDrawer.js
-      EntropyPanel.js
-```
-
-## Roadmap
-
-1. Add a full component gallery/demo
-2. Add input, label, and form patterns
-3. Add documentation for drawer, panel, and avatar usage
-4. Integrate the design system into the main app shell and editor surfaces
-
-## License
-
-MIT

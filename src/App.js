@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  AppBar,
   Box,
   Card,
   Container,
@@ -14,12 +13,16 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
 import EntropyButton from './design-system/components/EntropyButton';
 import EntropyAvatarStack from './design-system/components/EntropyAvatarStack';
 import EntropyToolbar from './design-system/components/EntropyToolbar';
 import EntropyChatInput from './design-system/components/EntropyChatInput';
 import EntropyDrawer from './design-system/components/EntropyDrawer';
+import EntropyInput from './design-system/components/EntropyInput';
+import EntropyBadge from './design-system/components/EntropyBadge';
+import EntropyModal from './design-system/components/EntropyModal';
+import EntropyAppBar from './design-system/components/EntropyAppBar';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,17 +41,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     boxShadow: theme.shadows[1],
   },
-  appBar: {
-    background: '#fff',
-    color: theme.palette.text.primary,
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    boxShadow: 'none',
-  },
-  toolbarTitle: {
-    flexGrow: 1,
-    fontWeight: 700,
-    letterSpacing: '-0.04em',
-  },
   section: {
     marginBottom: theme.spacing(5),
   },
@@ -57,15 +49,28 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     background: '#f7faf9',
     border: `1px solid ${theme.palette.divider}`,
-    minHeight: 112,
+    minHeight: 120,
+  },
+  galleryGrid: {
+    marginTop: theme.spacing(1),
+  },
+  row: {
+    display: 'flex',
+    gap: theme.spacing(1),
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  modalContent: {
+    paddingTop: theme.spacing(1),
+    color: theme.palette.text.secondary,
   },
 }));
 
 const collaborators = [
-  { name: 'Jeremy', color: '#00e676', photo: '' },
-  { name: 'Nathan', color: '#1f2937', photo: '' },
-  { name: 'Niko', color: '#3b82f6', photo: '' },
-  { name: 'Ava', color: '#fbbf24', photo: '' },
+  { name: 'Jeremy', color: '#00e676' },
+  { name: 'Nathan', color: '#1f2937' },
+  { name: 'Niko', color: '#3b82f6' },
+  { name: 'Ava', color: '#fbbf24' },
 ];
 
 const recentMessages = [
@@ -76,17 +81,21 @@ const recentMessages = [
 
 function App() {
   const classes = useStyles();
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" className={classes.toolbarTitle}>
-            Entropy Design System
-          </Typography>
-          <EntropyButton variant="contained">Launch Demo</EntropyButton>
-        </Toolbar>
-      </AppBar>
+      <EntropyAppBar
+        title="Entropy Design System"
+        actions={
+          <>
+            <EntropyButton variant="outlined" style={{ marginRight: 8 }}>
+              Docs
+            </EntropyButton>
+            <EntropyButton variant="contained">Launch demo</EntropyButton>
+          </>
+        }
+      />
 
       <Container maxWidth="lg" className={classes.hero}>
         <Grid container spacing={4} alignItems="center">
@@ -95,11 +104,14 @@ function App() {
               A cleaner, collaborative product language.
             </Typography>
             <Typography variant="h5" color="textSecondary" paragraph>
-              Built for diagram editing, real-time collaboration, and shared visual communication.
+              Built for diagram editing, live collaboration, and shared visual communication.
             </Typography>
-            <Box display="flex" alignItems="center" gap={2} mt={3}>
+            <Box className={classes.row} mt={3}>
               <EntropyButton variant="contained">Primary action</EntropyButton>
               <EntropyButton variant="outlined">Secondary</EntropyButton>
+              <EntropyButton variant="outlined" color="secondary">
+                More details
+              </EntropyButton>
             </Box>
           </Grid>
 
@@ -109,9 +121,10 @@ function App() {
                 Collaboration overview
               </Typography>
               <EntropyAvatarStack users={collaborators} max={4} />
-              <Box mt={3}>
-                <Chip label="Synced" color="primary" />
-                <Chip label="Live editing" style={{ marginLeft: 8 }} />
+              <Box mt={3} className={classes.row}>
+                <EntropyBadge label="Synced" tone="success" />
+                <EntropyBadge label="Live editing" tone="info" />
+                <EntropyBadge label="Needs review" tone="warning" />
               </Box>
             </Card>
           </Grid>
@@ -120,7 +133,7 @@ function App() {
 
       <Container maxWidth="lg" className={classes.section}>
         <Typography variant="h4" gutterBottom>
-          Foundation
+          Foundations
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -146,15 +159,45 @@ function App() {
 
       <Container maxWidth="lg" className={classes.section}>
         <Typography variant="h4" gutterBottom>
-          Component preview
+          Component gallery
         </Typography>
-        <Grid container spacing={3}>
+
+        <Grid container spacing={3} className={classes.galleryGrid}>
+          <Grid item xs={12} md={6}>
+            <Card className={classes.panel}>
+              <Typography variant="h6" gutterBottom>
+                Search + input
+              </Typography>
+              <EntropyInput
+                label="Search workspace"
+                placeholder="Find a file, node, or comment"
+                startAdornment={<SearchIcon fontSize="small" />}
+              />
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card className={classes.panel}>
+              <Typography variant="h6" gutterBottom>
+                Status badges
+              </Typography>
+              <Box className={classes.row} mt={2}>
+                <EntropyBadge label="Healthy" tone="success" />
+                <EntropyBadge label="Review" tone="warning" />
+                <EntropyBadge label="Info" tone="info" />
+                <EntropyBadge label="Default" tone="default" />
+              </Box>
+            </Card>
+          </Grid>
+
           <Grid item xs={12} md={6}>
             <Card className={classes.panel}>
               <Typography variant="h6" gutterBottom>
                 Editor toolbar
               </Typography>
-              <EntropyToolbar onAction={(action) => console.log(action)} />
+              <Box mt={2}>
+                <EntropyToolbar onAction={(action) => console.log(action)} />
+              </Box>
             </Card>
           </Grid>
 
@@ -163,23 +206,54 @@ function App() {
               <Typography variant="h6" gutterBottom>
                 Chat drawer
               </Typography>
-              <EntropyDrawer open title="Team chat" width={320}>
-                <List>
-                  {recentMessages.map((message) => (
-                    <React.Fragment key={message.user + message.time}>
-                      <ListItem alignItems="flex-start">
-                        <Avatar style={{ background: '#00e676', marginRight: 12 }}>{message.user[0]}</Avatar>
-                        <ListItemText
-                          primary={message.user}
-                          secondary={`${message.text} · ${message.time}`}
-                        />
-                      </ListItem>
-                      <Divider component="li" />
-                    </React.Fragment>
-                  ))}
-                </List>
-                <EntropyChatInput onSubmit={(value) => console.log(value)} />
-              </EntropyDrawer>
+              <Box mt={2}>
+                <EntropyDrawer open title="Team chat" width={300}>
+                  <List>
+                    {recentMessages.map((message) => (
+                      <React.Fragment key={message.user + message.time}>
+                        <ListItem alignItems="flex-start">
+                          <Avatar style={{ background: '#00e676', marginRight: 12 }}>{message.user[0]}</Avatar>
+                          <ListItemText primary={message.user} secondary={`${message.text} · ${message.time}`} />
+                        </ListItem>
+                        <Divider component="li" />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                  <EntropyChatInput onSubmit={(value) => console.log(value)} />
+                </EntropyDrawer>
+              </Box>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={12}>
+            <Card className={classes.panel}>
+              <Typography variant="h6" gutterBottom>
+                Modal / action pattern
+              </Typography>
+              <Box className={classes.row} mt={2}>
+                <EntropyButton variant="contained" onClick={() => setModalOpen(true)}>
+                  Open modal
+                </EntropyButton>
+              </Box>
+              <EntropyModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                title="Share document"
+                actions={
+                  <>
+                    <EntropyButton variant="outlined" onClick={() => setModalOpen(false)}>
+                      Cancel
+                    </EntropyButton>
+                    <EntropyButton variant="contained" onClick={() => setModalOpen(false)}>
+                      Copy link
+                    </EntropyButton>
+                  </>
+                }
+              >
+                <div className={classes.modalContent}>
+                  Anyone with the link can view this collaborative document. Toggle access to enable editing.
+                </div>
+              </EntropyModal>
             </Card>
           </Grid>
         </Grid>
